@@ -46,11 +46,11 @@ func FetchGames() ([]*Game, error) {
 		return nil, fmt.Errorf("could not fetch games: %s", resp.Status)
 	}
 	var config struct {
-		games []*Game
+		Games []*Game `toml:"games"`
 	}
 	_, err = toml.NewDecoder(resp.Body).Decode(&config)
 	if err != nil {
 		return nil, fmt.Errorf("could not decode games")
 	}
-	return config.games, nil
+	return config.Games, nil
 }
