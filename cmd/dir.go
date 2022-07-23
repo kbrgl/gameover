@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/mitchellh/go-homedir"
@@ -16,6 +17,7 @@ var (
 func init() {
 	GameoverDir, _ = homedir.Expand(GameoverDir)
 	BinariesDir, _ = homedir.Expand(BinariesDir)
+	os.MkdirAll(BinariesDir, os.ModePerm)
 }
 
 func gameoverDir(path string) string {
