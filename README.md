@@ -14,7 +14,7 @@ Gameover is a platform for distributing text-based games for the terminal. It co
 
 ## Develop a game
 
-Games are written in Go. I recommend using the [Charm](https://charm.sh) libraries. To make your game installable through Gameover, just send a PR adding your game to `games.yml`.
+Games are written in Go. I recommend using the [Charm](https://charm.sh) libraries. To make your game installable through Gameover, just send a PR adding your game to `games.toml`.
 
 ## License
 
