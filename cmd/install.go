@@ -35,16 +35,24 @@ func init() {
 }
 
 func buildAndAdd(fp string) error {
-	cmd := exec.Command("go", "build", "-o", binariesDir(filepath.Base(fp)), fp)
-	err := cmd.Run()
+	os.Chdir(fp)
+	cmdDownload := exec.Command("go", "mod", "download")
+	cmdDownload.Stdout = os.Stdout
+	cmdDownload.Stderr = os.Stderr
+	err := cmdDownload.Run()
 	if err != nil {
 		return err
 	}
-	return nil
+	cmdBuild := exec.Command("go", "build", "-o", filepath.Join("../bin", filepath.Base(fp)))
+	cmdBuild.Stdout = os.Stdout
+	cmdBuild.Stderr = os.Stderr
+	return cmdBuild.Run()
 }
 
 func Install(g *Game) error {
 	fp := gameoverDir(g.Name)
+	os.RemoveAll(fp)
+
 	_, err := git.PlainClone(fp, false, &git.CloneOptions{
 		URL: g.Repo,
 	})
