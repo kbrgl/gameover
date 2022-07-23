@@ -8,8 +8,14 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "gameover",
-	Short: "Gaming for your terminal",
+	Use: "gameover",
+	Short: `   ___                                         
+  / _ \__ _ _ __ ___   ___  _____   _____ _ __ 
+ / /_\/ _' | '_ ' _ \ / _ \/ _ \ \ / / _ \ '__|
+/ /_\\ (_| | | | | | |  __/ (_) \ V /  __/ |   
+\____/\__,_|_| |_| |_|\___|\___/ \_/ \___|_|
+
+Play text-based games right in your terminal.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
