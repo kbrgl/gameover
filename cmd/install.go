@@ -21,7 +21,11 @@ var (
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			Install(FindGame(args[0], games))
+			err = Install(FindGame(args[0], games))
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
 		},
 	}
 )
@@ -45,6 +49,9 @@ func Install(g *Game) error {
 		URL: g.Repo,
 	})
 	if err != nil {
+		if err == git.ErrRepositoryAlreadyExists {
+			return fmt.Errorf("game already installed: %s", g.Name)
+		}
 		return err
 	}
 
