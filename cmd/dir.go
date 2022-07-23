@@ -1,6 +1,10 @@
 package cmd
 
-import "path/filepath"
+import (
+	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
+)
 
 var (
 	// GameoverDir is the directory where games are installed.
@@ -8,6 +12,11 @@ var (
 	// BinariesDir is the directory where binaries are installed.
 	BinariesDir = "~/.gameover/bin"
 )
+
+func init() {
+	GameoverDir, _ = homedir.Expand(GameoverDir)
+	BinariesDir, _ = homedir.Expand(BinariesDir)
+}
 
 func gameoverDir(path string) string {
 	return filepath.Join(GameoverDir, path)
