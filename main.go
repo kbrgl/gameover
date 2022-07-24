@@ -1,6 +1,9 @@
 package main
 
-import "github.com/kbrgl/gameover/cmd"
+import (
+	_ "github.com/joho/godotenv/autoload"
+	"github.com/kbrgl/gameover/cmd"
+)
 
 func main() {
 	cmd.Execute()
