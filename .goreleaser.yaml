@@ -29,3 +29,4 @@ brews:
       license: GPL-3.0-only
       dependencies:
           - name: go
+      folder: Formula
