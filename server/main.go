@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/golang-jwt/jwt"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -20,24 +19,19 @@ var (
 func main() {
 	secretKey = []byte(os.Getenv("SECRET_KEY"))
 
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	var err error
+	db, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("failed to connect database")
 	}
 	db.AutoMigrate(&User{})
 
 	e := echo.New()
+
 	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
 
-	e.POST("/login", login)
 	e.POST("/register", register)
-	config := middleware.JWTConfig{
-		Claims:     &jwt.StandardClaims{},
-		SigningKey: secretKey,
-	}
-
-	e.Use(middleware.JWTWithConfig(config))
+	e.POST("/login", login)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

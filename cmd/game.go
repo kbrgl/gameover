@@ -3,8 +3,12 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"os/exec"
+	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/go-git/go-git/v5"
 	"github.com/kbrgl/fuzzy"
 )
 
@@ -53,4 +57,50 @@ func FetchGames() ([]*Game, error) {
 		return nil, fmt.Errorf("could not decode games")
 	}
 	return config.Games, nil
+}
+
+func buildAndAdd(fp string) error {
+	os.Chdir(fp)
+	cmdDownload := exec.Command("go", "mod", "download")
+	cmdDownload.Stdout = os.Stdout
+	cmdDownload.Stderr = os.Stderr
+	err := cmdDownload.Run()
+	if err != nil {
+		return err
+	}
+	cmdBuild := exec.Command("go", "build", "-o", filepath.Join("../bin", filepath.Base(fp)))
+	cmdBuild.Stdout = os.Stdout
+	cmdBuild.Stderr = os.Stderr
+	return cmdBuild.Run()
+}
+
+func InstallGame(g *Game) error {
+	fp := gameoverDir(g.Name)
+	os.RemoveAll(fp)
+
+	_, err := git.PlainClone(fp, false, &git.CloneOptions{
+		URL: g.Repo,
+	})
+	if err != nil {
+		if err == git.ErrRepositoryAlreadyExists {
+			return fmt.Errorf("game already installed: %s", g.Name)
+		}
+		return err
+	}
+
+	err = buildAndAdd(fp)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func PlayGame(g *Game) error {
+	bin := binariesDir(g.Name)
+	cmd := exec.Command(bin)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	return cmd.Run()
 }

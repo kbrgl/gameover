@@ -12,19 +12,19 @@ func login(c echo.Context) error {
 	username := c.FormValue("username")
 	password := c.FormValue("password")
 
+	if username == "" || password == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "missing username or password")
+	}
+
 	var user User
 	tx := db.First(&user, "username = ?", username)
 	if tx.Error != nil {
-		return c.JSON(401, echo.Map{
-			"message": "Unauthorized",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid username or password")
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
 	if err != nil {
-		return c.JSON(401, echo.Map{
-			"message": "Unauthorized",
-		})
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid username or password")
 	}
 
 	claims := jwt.StandardClaims{
@@ -37,7 +37,5 @@ func login(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{
-		"token": t,
-	})
+	return c.String(http.StatusOK, t)
 }
