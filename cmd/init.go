@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -15,7 +14,7 @@ var (
 		Use:   "init",
 		Short: "Initialize ~/.gameover.",
 		Run: func(cmd *cobra.Command, args []string) {
-			tmp, err := ioutil.TempDir("", "gameover")
+			tmp, err := os.MkdirTemp("", "gameover")
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
