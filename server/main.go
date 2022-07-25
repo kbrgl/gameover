@@ -32,6 +32,7 @@ func main() {
 
 	e.POST("/register", register)
 	e.POST("/login", login)
+	e.POST("/friend", friend)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
