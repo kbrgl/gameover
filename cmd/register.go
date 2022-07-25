@@ -35,11 +35,6 @@ func register(cmd *cobra.Command, args []string) {
 	password, _ := term.ReadPassword(syscall.Stdin)
 	fmt.Println()
 
-	var email string
-	fmt.Print("Email: ")
-	fmt.Scanln(&email)
-	fmt.Println()
-
 	fmt.Print("Confirm password: ")
 	confirm, _ := term.ReadPassword(syscall.Stdin)
 	fmt.Println()
@@ -47,6 +42,11 @@ func register(cmd *cobra.Command, args []string) {
 		fmt.Println("Passwords do not match")
 		os.Exit(1)
 	}
+
+	var email string
+	fmt.Print("Email: ")
+	fmt.Scanln(&email)
+	fmt.Println()
 
 	form := url.Values{}
 	form.Add("username", username)
