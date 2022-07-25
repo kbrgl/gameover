@@ -21,11 +21,19 @@ Play text-based games right in your terminal.`,
 	},
 }
 
+var token string
+
 func init() {
 	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 }
 
 func Execute() {
+	dat, err := os.ReadFile(gameoverDir("token"))
+	if err != nil {
+		fmt.Println("could not read login token:", err)
+		os.Exit(1)
+	}
+	token = string(dat)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

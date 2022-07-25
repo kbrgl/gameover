@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -61,15 +61,13 @@ func login(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	var result map[string]string
-	err = json.NewDecoder(r.Body).Decode(&result)
+	token, err := io.ReadAll(r.Body)
 	if err != nil {
 		fmt.Println("could not login:", err)
 		os.Exit(1)
 	}
 
-	fmt.Println("Saving token:", result["token"])
-	err = saveToken(result["token"])
+	err = saveToken(string(token))
 	if err != nil {
 		fmt.Println("could not save token:", err)
 		os.Exit(1)

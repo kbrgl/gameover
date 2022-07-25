@@ -63,7 +63,7 @@ func register(cmd *cobra.Command, args []string) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		var result map[string]string
 		json.NewDecoder(resp.Body).Decode(&result)
 		fmt.Println("could not register:", result["message"])

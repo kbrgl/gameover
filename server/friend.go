@@ -20,7 +20,7 @@ func friend(c echo.Context) error {
 	}
 
 	var user User
-	id := c.Get("user").(*jwt.Token).Claims.(*jwt.StandardClaims).Subject
+	id := c.Get("user").(*jwt.Token).Claims.(jwt.MapClaims)["sub"]
 	err = db.Where("id = ?", id).First(&user).Error
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "failed to get user")
