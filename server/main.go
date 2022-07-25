@@ -32,7 +32,11 @@ func main() {
 
 	e.POST("/register", register)
 	e.POST("/login", login)
-	e.POST("/friend", friend)
+
+	config := middleware.JWTConfig{
+		SigningKey: secretKey,
+	}
+	e.POST("/friend", friend, middleware.JWTWithConfig(config))
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
