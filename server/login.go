@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/golang-jwt/jwt"
@@ -28,7 +29,7 @@ func login(c echo.Context) error {
 	}
 
 	claims := jwt.StandardClaims{
-		Subject: user.Username,
+		Subject: fmt.Sprint(user.ID),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
